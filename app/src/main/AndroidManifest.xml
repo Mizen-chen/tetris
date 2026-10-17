@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+            android:allowBackup="true"
+            android:label="俄罗斯方块"
+            android:theme="@style/Theme.Tetris">
+
+        <!-- 主界面 -->
+        <activity android:name=".ui.MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.GameActivity" android:exported="false" />
+        <activity android:name=".ui.RankActivity" android:exported="false" />
+
+        <!-- 绑定式 Service：游戏引擎 -->
+        <service android:name=".service.GameService" android:exported="false" />
+
+        <!-- 静态注册广播：开机 -->
+        <receiver android:name=".receiver.BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ContentProvider -->
+        <provider
+                android:name=".provider.ScoreProvider"
+                android:authorities="com.example.tetris.provider"
+                android:exported="true" />
+    </application>
+</manifest>

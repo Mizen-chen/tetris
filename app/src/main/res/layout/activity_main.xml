@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:padding="24dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="俄罗斯方块"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="40dp"
+            android:textColor="#009688"/>
+
+    <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入玩家昵称"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:inputType="text"
+            android:layout_marginBottom="24dp"/>
+
+    <Button
+            android:id="@+id/btn_start"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="开始游戏"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"/>
+
+    <Button
+            android:id="@+id/btn_rank"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="查看排行榜"
+            android:textSize="18sp"
+            android:layout_marginBottom="12dp"/>
+
+    <!-- 新增的退出登录按钮，默认隐藏 -->
+    <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="退出登录"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:backgroundTint="#FF5252"
+            android:textColor="#FFFFFF"/>
+</LinearLayout>

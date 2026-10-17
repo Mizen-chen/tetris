@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="8dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🏆 全球排行榜"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="16dp"
+                android:textColor="#FF9800"/>
+
+        <ImageButton
+                android:id="@+id/btn_exit_rank"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/exit_rank"
+                android:src="@drawable/ic_close"
+                app:tint="#FF424242"
+                android:background="@drawable/bg_icon_button"
+                android:padding="8dp"
+                android:tooltipText="@string/exit_rank"/>
+    </LinearLayout>
+
+    <ListView
+            android:id="@+id/lv_rank"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</LinearLayout>

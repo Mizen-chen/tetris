@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="#FAFAFA"
+              android:padding="12dp">
+
+    <!-- 顶部信息栏 -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+        <TextView android:id="@+id/tv_score" android:layout_width="0dp"
+                  android:layout_height="wrap_content" android:layout_weight="1"
+                  android:text="分数：0" android:textSize="18sp" android:textStyle="bold" android:textColor="#009688"/>
+        <TextView android:id="@+id/tv_lines" android:layout_width="0dp"
+                  android:layout_height="wrap_content" android:layout_weight="1"
+                  android:text="消行：0" android:textSize="16sp" android:gravity="center"/>
+        <TextView android:id="@+id/tv_level" android:layout_width="0dp"
+                  android:layout_height="wrap_content" android:layout_weight="1"
+                  android:text="等级：1" android:textSize="16sp" android:gravity="end"/>
+    </LinearLayout>
+
+    <!-- 游戏内功能按钮 -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+        <Button
+                android:id="@+id/btn_game_rank"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="查看排行榜"
+                android:textSize="14sp"
+                android:backgroundTint="#FFC107"
+                android:textColor="#FFFFFF"/>
+        <ImageButton
+                android:id="@+id/btn_restart_game"
+                android:layout_width="48dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="@string/restart_game"
+                android:src="@drawable/ic_refresh"
+                app:tint="#FF424242"
+                android:background="@drawable/bg_icon_button"
+                android:padding="8dp"
+                android:tooltipText="@string/restart_game"/>
+        <ImageButton
+                android:id="@+id/btn_exit_game"
+                android:layout_width="48dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="@string/exit_game"
+                android:src="@drawable/ic_close"
+                app:tint="#FF424242"
+                android:background="@drawable/bg_icon_button"
+                android:padding="8dp"
+                android:tooltipText="@string/exit_game"/>
+    </LinearLayout>
+
+    <!-- 游戏画布 -->
+    <com.example.tetris.ui.GameView
+            android:id="@+id/game_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="12dp"/>
+
+    <!-- 操作按钮1 -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <Button android:id="@+id/btn_left" android:layout_width="0dp"
+                android:layout_height="60dp" android:layout_weight="1" android:layout_marginEnd="4dp"
+                android:text="向左" android:textSize="16sp" android:backgroundTint="#FF7f24"/>
+        <Button android:id="@+id/btn_rotate" android:layout_width="0dp"
+                android:layout_height="60dp" android:layout_weight="1" android:layout_marginStart="4dp" android:layout_marginEnd="4dp"
+                android:text="旋转" android:textSize="16sp" android:textStyle="bold" android:backgroundTint="#03A9F4" android:textColor="#FFFFFF"/>
+        <Button android:id="@+id/btn_right" android:layout_width="0dp"
+                android:layout_height="60dp" android:layout_weight="1" android:layout_marginStart="4dp"
+                android:text="向右" android:textSize="16sp" android:backgroundTint="#FF7f24"/>
+    </LinearLayout>
+
+    <!-- 操作按钮2 -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+        <Button android:id="@+id/btn_drop" android:layout_width="0dp"
+                android:layout_height="60dp" android:layout_weight="1" android:layout_marginEnd="4dp"
+                android:text="速降" android:textSize="16sp" android:backgroundTint="#8BC34A" android:textColor="#FFFFFF"/>
+        <Button android:id="@+id/btn_pause" android:layout_width="0dp"
+                android:layout_height="60dp" android:layout_weight="1" android:layout_marginStart="4dp"
+                android:text="暂停" android:textSize="16sp" android:backgroundTint="#F4A460"/>
+    </LinearLayout>
+</LinearLayout>
