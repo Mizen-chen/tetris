@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 莫兰迪渐变：从浅灰米到浅灰蓝 -->
+    <gradient
+            android:startColor="#D9D2C8"
+            android:endColor="#C2CCD6"
+            android:angle="270" />
+</shape>

@@ -23,6 +23,8 @@ public class ScoreProvider extends ContentProvider {
         MATCHER.addURI(Constants.AUTHORITY, Constants.TABLE_PLAYER, Constants.PLAYER);
         MATCHER.addURI(Constants.AUTHORITY, Constants.TABLE_SCORE, Constants.SCORE);
         MATCHER.addURI(Constants.AUTHORITY, Constants.TABLE_SCORE + "/#", Constants.SCORE_ID);
+        MATCHER.addURI(Constants.AUTHORITY, Constants.TABLE_HISTORY, Constants.HISTORY);
+        MATCHER.addURI(Constants.AUTHORITY, Constants.TABLE_HISTORY + "/#", Constants.HISTORY_ID);
     }
 
     @Override
@@ -55,6 +57,16 @@ public class ScoreProvider extends ContentProvider {
                 cursor = db.query(Constants.TABLE_SCORE, projection, selection,
                         selectionArgs, null, null, sortOrder);
                 break;
+            case Constants.HISTORY:
+                cursor = db.query(Constants.TABLE_HISTORY, projection, selection,
+                        selectionArgs, null, null, sortOrder);
+                break;
+            case Constants.HISTORY_ID:
+                selection = "_id=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = db.query(Constants.TABLE_HISTORY, projection, selection,
+                        selectionArgs, null, null, sortOrder);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -81,6 +93,10 @@ public class ScoreProvider extends ContentProvider {
                 id = db.insert(Constants.TABLE_SCORE, null, values);
                 resultUri = ContentUris.withAppendedId(uri, id);
                 break;
+            case Constants.HISTORY:
+                id = db.insert(Constants.TABLE_HISTORY, null, values);
+                resultUri = ContentUris.withAppendedId(uri, id);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -94,7 +110,20 @@ public class ScoreProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues values,
                       @Nullable String selection, @Nullable String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count = db.update(Constants.TABLE_SCORE, values, selection, selectionArgs);
+        int count;
+        int code = MATCHER.match(uri);
+        switch (code) {
+            case Constants.SCORE:
+            case Constants.SCORE_ID:
+                count = db.update(Constants.TABLE_SCORE, values, selection, selectionArgs);
+                break;
+            case Constants.HISTORY:
+            case Constants.HISTORY_ID:
+                count = db.update(Constants.TABLE_HISTORY, values, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
         if (getContext() != null) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -105,7 +134,20 @@ public class ScoreProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String selection,
                       @Nullable String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count = db.delete(Constants.TABLE_SCORE, selection, selectionArgs);
+        int count;
+        int code = MATCHER.match(uri);
+        switch (code) {
+            case Constants.SCORE:
+            case Constants.SCORE_ID:
+                count = db.delete(Constants.TABLE_SCORE, selection, selectionArgs);
+                break;
+            case Constants.HISTORY:
+            case Constants.HISTORY_ID:
+                count = db.delete(Constants.TABLE_HISTORY, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
         if (getContext() != null) {
             getContext().getContentResolver().notifyChange(uri, null);
         }

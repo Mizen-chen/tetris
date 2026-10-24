@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- 莫兰迪主色：灰绿 -->
+    <color name="morandi_primary">#8FA89A</color>
+    <color name="morandi_primary_light">#C5D0C7</color>
+
+    <!-- 莫兰迪次色：灰蓝 -->
+    <color name="morandi_secondary">#9DAFBD</color>
+    <color name="morandi_secondary_light">#C2CCD6</color>
+
+    <!-- 莫兰迪中性：灰米 -->
+    <color name="morandi_neutral">#BFB5A8</color>
+    <color name="morandi_neutral_light">#D9D2C8</color>
+
+    <!-- 莫兰迪警示：灰玫红 -->
+    <color name="morandi_warning">#B89E9A</color>
+    <color name="morandi_warning_light">#D4C2BF</color>
+
+    <!-- 莫兰迪暖棕：琥珀 -->
+    <color name="morandi_amber">#C4A882</color>
+
+    <!-- 文字颜色 -->
+    <color name="morandi_text_dark">#4A4A4A</color>
+    <color name="morandi_text_medium">#6B6B6B</color>
+    <color name="morandi_text_light">#999999</color>
+
+    <!-- 背景颜色 -->
+    <color name="morandi_bg">#EDE9E2</color>
+    <color name="morandi_card">#F5F2ED</color>
 </resources>

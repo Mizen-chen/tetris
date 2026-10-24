@@ -31,6 +31,10 @@ public class GameService extends Service {
     private int level = 1;
     private boolean running = false;
 
+    // 历史记录相关：本局开始时间戳与已锁定的方块数
+    private long startTimeMillis = 0L;
+    private int piecesCount = 0;
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable tick;
 
@@ -49,6 +53,8 @@ public class GameService extends Service {
     public void startGame() {
         board = new GameBoard();
         score = 0; lines = 0; level = 1;
+        piecesCount = 0;
+        startTimeMillis = System.currentTimeMillis();
         current = board.newPiece();
         running = true;
         scheduleTick();
@@ -125,14 +131,13 @@ public class GameService extends Service {
 
     private void lockPiece() {
         board.lock(current);
+        piecesCount++;
 
-        // 【修改点1】每次锁定方块，基础分 +1
         score += 1;
 
         int cleared = board.clearLines();
         if (cleared > 0) {
             lines += cleared;
-            // 【修改点2】消除行给额外奖励分
             score += cleared * 100 * level;
             level = 1 + lines / 5;
         }
@@ -152,6 +157,8 @@ public class GameService extends Service {
         running = false;
         if (tick != null) handler.removeCallbacks(tick);
 
+        int duration = (int) ((System.currentTimeMillis() - startTimeMillis) / 1000);
+
         if (listener != null) listener.onGameOver(score, lines, level);
 
         // 用广播通知（BroadcastReceiver 登场）
@@ -159,6 +166,8 @@ public class GameService extends Service {
         intent.putExtra(Constants.EXTRA_SCORE, score);
         intent.putExtra(Constants.EXTRA_LINES, lines);
         intent.putExtra(Constants.EXTRA_LEVEL, level);
+        intent.putExtra(Constants.EXTRA_DURATION, duration);
+        intent.putExtra(Constants.EXTRA_PIECES, piecesCount);
         intent.setPackage(getPackageName());
         sendBroadcast(intent);
     }
@@ -169,10 +178,6 @@ public class GameService extends Service {
 
     private void notifyScore() {
         if (listener != null) listener.onScoreChanged(score, lines, level);
-        Intent intent = new Intent(Constants.ACTION_SCORE_UPDATE);
-        intent.putExtra(Constants.EXTRA_SCORE, score);
-        intent.setPackage(getPackageName());
-        sendBroadcast(intent);
     }
 
     @Override
@@ -185,8 +190,5 @@ public class GameService extends Service {
     // 供 Activity 绘制读取
     public int[][] getGrid() { return board == null ? new int[GameBoard.ROWS][GameBoard.COLS] : board.grid; }
     public Tetromino getCurrent() { return current; }
-    public int getScore() { return score; }
-    public int getLines() { return lines; }
-    public int getLevel() { return level; }
     public boolean isRunning() { return running; }
 }

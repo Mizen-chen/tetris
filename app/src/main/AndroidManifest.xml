@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <application
             android:allowBackup="true"
             android:label="俄罗斯方块"
@@ -18,16 +16,10 @@
 
         <activity android:name=".ui.GameActivity" android:exported="false" />
         <activity android:name=".ui.RankActivity" android:exported="false" />
+        <activity android:name=".ui.HistoryActivity" android:exported="false" />
 
         <!-- 绑定式 Service：游戏引擎 -->
         <service android:name=".service.GameService" android:exported="false" />
-
-        <!-- 静态注册广播：开机 -->
-        <receiver android:name=".receiver.BootReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
 
         <!-- ContentProvider -->
         <provider
