@@ -8,20 +8,24 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.tetris.R;
 import com.example.tetris.service.GameService;
 import com.example.tetris.util.Constants;
+import com.google.android.material.button.MaterialButton;
 
 public class GameActivity extends AppCompatActivity implements GameService.GameListener {
 
@@ -36,7 +40,7 @@ public class GameActivity extends AppCompatActivity implements GameService.GameL
     private int lastGameOverScore;
     private int lastGameOverLines;
     private int lastGameOverLevel;
-    private AlertDialog gameOverDialog;
+    private android.app.Dialog gameOverDialog;
 
     private final ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -61,8 +65,11 @@ public class GameActivity extends AppCompatActivity implements GameService.GameL
             int score = intent.getIntExtra(Constants.EXTRA_SCORE, 0);
             int lines = intent.getIntExtra(Constants.EXTRA_LINES, 0);
             int level = intent.getIntExtra(Constants.EXTRA_LEVEL, 1);
+            int duration = intent.getIntExtra(Constants.EXTRA_DURATION, 0);
+            int pieces = intent.getIntExtra(Constants.EXTRA_PIECES, 0);
             if (gameOverPending) return;
             saveScore(score, lines, level);
+            saveHistory(score, lines, level, duration, pieces);
             lastGameOverScore = score;
             lastGameOverLines = lines;
             lastGameOverLevel = level;
@@ -109,7 +116,7 @@ public class GameActivity extends AppCompatActivity implements GameService.GameL
             }
         });
 
-        // 【新增】查看排行榜（先暂停游戏，防止回来就死了）
+        // 查看排行榜（先暂停游戏，防止回来就死了）
         btnGameRank.setOnClickListener(v -> {
             if (bound && service.isRunning()) {
                 service.pauseGame();
@@ -118,8 +125,9 @@ public class GameActivity extends AppCompatActivity implements GameService.GameL
             startActivity(new Intent(GameActivity.this, RankActivity.class));
         });
 
-        ImageButton btnRestartGame = findViewById(R.id.btn_restart_game);
-        ImageButton btnExitGame = findViewById(R.id.btn_exit_game);
+        // 注意：这里改为了 MaterialButton 类型以匹配新的 XML 布局
+        MaterialButton btnRestartGame = findViewById(R.id.btn_restart_game);
+        MaterialButton btnExitGame = findViewById(R.id.btn_exit_game);
         btnRestartGame.setOnClickListener(v -> confirmRestart());
         btnExitGame.setOnClickListener(v -> confirmExit());
 
@@ -176,59 +184,140 @@ public class GameActivity extends AppCompatActivity implements GameService.GameL
     private void showGameOverDialog(int score, int lines, int level) {
         if (gameOverDialogShowing) return;
         gameOverDialogShowing = true;
-        gameOverDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.game_over_title)
-                .setMessage(getString(R.string.game_over_result, score, lines, level))
-                .setCancelable(false)
-                .setPositiveButton(R.string.continue_next_round, (dialog, which) -> {
-                    gameOverDialogShowing = false;
-                    gameOverPending = false;
-                    if (bound && service != null) {
-                        service.startGame();
-                        btnPause.setText(R.string.pause_game);
-                    }
-                })
-                .setNeutralButton(R.string.view_leaderboard, null)
-                .setNegativeButton(R.string.exit_game, (dialog, which) -> {
-                    gameOverDialogShowing = false;
-                    gameOverPending = false;
-                    finish();
-                })
-                .setOnDismissListener(dialog -> gameOverDialogShowing = false)
-                .create();
 
-        gameOverDialog.setOnShowListener(dialog -> {
-            gameOverDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v ->
-                    startActivity(new Intent(GameActivity.this, RankActivity.class))
-            );
+        gameOverDialog = new android.app.Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_game_over, null);
+        gameOverDialog.setContentView(view);
+        if (gameOverDialog.getWindow() != null) {
+            gameOverDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            WindowManager.LayoutParams lp = gameOverDialog.getWindow().getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            lp.dimAmount = 0.5f;
+            gameOverDialog.getWindow().setAttributes(lp);
+            gameOverDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
+        gameOverDialog.setCancelable(false);
+        gameOverDialog.setCanceledOnTouchOutside(false);
+
+        TextView tvScore = view.findViewById(R.id.dialog_go_score);
+        TextView tvLines = view.findViewById(R.id.dialog_go_lines);
+        TextView tvLevel = view.findViewById(R.id.dialog_go_level);
+        MaterialButton btnContinue = view.findViewById(R.id.dialog_go_continue);
+        MaterialButton btnRank = view.findViewById(R.id.dialog_go_rank);
+        MaterialButton btnExit = view.findViewById(R.id.dialog_go_exit);
+
+        tvScore.setText(String.valueOf(score));
+        tvLines.setText(getString(R.string.game_over_lines, lines));
+        tvLevel.setText(getString(R.string.game_over_level, level));
+
+        btnContinue.setOnClickListener(v -> {
+            gameOverDialogShowing = false;
+            gameOverPending = false;
+            gameOverDialog.dismiss();
+            if (bound && service != null) {
+                service.startGame();
+                btnPause.setText(R.string.pause_game);
+            }
         });
+
+        btnRank.setOnClickListener(v ->
+                startActivity(new Intent(GameActivity.this, RankActivity.class))
+        );
+
+        btnExit.setOnClickListener(v -> {
+            gameOverDialogShowing = false;
+            gameOverPending = false;
+            gameOverDialog.dismiss();
+            finish();
+        });
+
+        gameOverDialog.setOnDismissListener(dialog -> gameOverDialogShowing = false);
         gameOverDialog.show();
     }
 
     private void confirmRestart() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.confirm_restart_title)
-                .setMessage(R.string.confirm_restart_message)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.restart_game, (dialog, which) -> {
+        showConfirmDialog(
+                getString(R.string.confirm_restart_title),
+                getString(R.string.confirm_restart_message),
+                getString(R.string.restart_game),
+                ContextCompat.getColor(this, R.color.morandi_primary),
+                () -> {
                     if (bound && service != null) {
                         service.startGame();
                         btnPause.setText(R.string.pause_game);
                     }
-                })
-                .show();
+                }
+        );
     }
 
     private void confirmExit() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.confirm_exit_title)
-                .setMessage(R.string.confirm_exit_message)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.exit_game, (dialog, which) -> {
-                    if (bound && service != null) service.pauseGame();
-                    finish();
-                })
-                .show();
+        showConfirmDialog(
+                getString(R.string.confirm_exit_title),
+                getString(R.string.confirm_exit_message),
+                getString(R.string.exit_game),
+                ContextCompat.getColor(this, R.color.morandi_warning),
+                this::finish
+        );
+    }
+
+    /**
+     * 通用确认弹窗：弹窗前自动暂停游戏，点击取消或关闭时自动恢复游戏。
+     */
+    private void showConfirmDialog(String title, String message, String confirmText,
+                                   int confirmBgColor, Runnable onConfirm) {
+        // 弹窗前先暂停游戏，并记录原本是否在运行，便于取消时恢复
+        boolean wasRunning = bound && service != null && service.isRunning();
+        if (wasRunning) {
+            service.pauseGame();
+            btnPause.setText(R.string.resume_game);
+        }
+
+        android.app.Dialog dialog = new android.app.Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_confirm, null);
+        dialog.setContentView(view);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            lp.dimAmount = 0.5f;
+            dialog.getWindow().setAttributes(lp);
+            dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
+        dialog.setCancelable(true);
+
+        TextView tvTitle = view.findViewById(R.id.dialog_title);
+        TextView tvMessage = view.findViewById(R.id.dialog_message);
+        MaterialButton btnCancel = view.findViewById(R.id.dialog_cancel);
+        MaterialButton btnConfirm = view.findViewById(R.id.dialog_confirm);
+
+        tvTitle.setText(title);
+        tvMessage.setText(message);
+        btnConfirm.setText(confirmText);
+        btnConfirm.setBackgroundColor(confirmBgColor);
+
+        Runnable resumeIfNeeded = () -> {
+            if (wasRunning && bound && service != null) {
+                service.resumeGame();
+                btnPause.setText(R.string.pause_game);
+            }
+        };
+
+        btnCancel.setOnClickListener(v -> {
+            dialog.dismiss();
+            resumeIfNeeded.run();
+        });
+
+        btnConfirm.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (onConfirm != null) onConfirm.run();
+        });
+
+        // 点击弹窗外部或返回键关闭时，同样恢复游戏
+        dialog.setOnCancelListener(d -> resumeIfNeeded.run());
+
+        dialog.show();
     }
 
     private void saveScore(int score, int lines, int level) {
@@ -240,6 +329,20 @@ public class GameActivity extends AppCompatActivity implements GameService.GameL
         cv.put("lines", lines);
         cv.put("played_at", System.currentTimeMillis());
         Uri uri = Uri.parse("content://" + Constants.AUTHORITY + "/" + Constants.TABLE_SCORE);
+        getContentResolver().insert(uri, cv);
+    }
+
+    private void saveHistory(int score, int lines, int level, int duration, int pieces) {
+        int playerId = getPlayerId(playerName);
+        ContentValues cv = new ContentValues();
+        cv.put("player_id", playerId);
+        cv.put("score", score);
+        cv.put("level", level);
+        cv.put("lines", lines);
+        cv.put("duration", duration);
+        cv.put("pieces", pieces);
+        cv.put("played_at", System.currentTimeMillis());
+        Uri uri = Uri.parse("content://" + Constants.AUTHORITY + "/" + Constants.TABLE_HISTORY);
         getContentResolver().insert(uri, cv);
     }
 

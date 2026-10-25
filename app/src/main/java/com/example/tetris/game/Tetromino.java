@@ -21,8 +21,8 @@ public class Tetromino {
     };
 
     public static final int[] COLORS = {
-            0xFF00FFFF, 0xFFFFFF00, 0xFF800080,
-            0xFF00FF00, 0xFFFF0000, 0xFF0000FF, 0xFFFFA500
+            0xFF8FC4C4, 0xFFD4C89A, 0xFF9B8EAD,
+            0xFF8FA89A, 0xFFB89E9A, 0xFF9DAFBD, 0xFFC4A882
     };
 
     public int type;         // 0~6
@@ -54,13 +54,5 @@ public class Tetromino {
             result[i][1] = y + ry;
         }
         return result;
-    }
-
-    public Tetromino copy() {
-        Tetromino t = new Tetromino(type);
-        t.rotation = rotation;
-        t.x = x;
-        t.y = y;
-        return t;
     }
 }

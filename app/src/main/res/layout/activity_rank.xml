@@ -4,39 +4,75 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:padding="8dp">
+              android:background="@drawable/bg_main_gradient"
+              android:padding="16dp">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@color/morandi_card"
+            app:contentPadding="16dp">
 
-        <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="🏆 全球排行榜"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:padding="16dp"
-                android:textColor="#FF9800"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <ImageButton
-                android:id="@+id/btn_exit_rank"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:contentDescription="@string/exit_rank"
-                android:src="@drawable/ic_close"
-                app:tint="#FF424242"
-                android:background="@drawable/bg_icon_button"
-                android:padding="8dp"
-                android:tooltipText="@string/exit_rank"/>
-    </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="12dp">
 
-    <ListView
-            android:id="@+id/lv_rank"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+                <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_trophy"
+                        app:tint="@color/morandi_primary"
+                        android:contentDescription="@null"/>
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="全球排行榜"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="@color/morandi_text_dark"
+                        android:layout_marginStart="8dp"/>
+
+                <ImageButton
+                        android:id="@+id/btn_exit_rank"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="@string/exit_rank"
+                        android:src="@drawable/ic_close"
+                        app:tint="@color/morandi_text_dark"
+                        android:background="@drawable/bg_icon_button"
+                        android:padding="8dp"
+                        android:tooltipText="@string/exit_rank"/>
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/morandi_neutral_light"/>
+
+            <ListView
+                    android:id="@+id/lv_rank"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="8dp"
+                    android:divider="@color/morandi_neutral_light"
+                    android:dividerHeight="1dp"
+                    android:listSelector="@android:color/transparent"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

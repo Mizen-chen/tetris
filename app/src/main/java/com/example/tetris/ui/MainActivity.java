@@ -19,7 +19,7 @@ import com.example.tetris.util.Constants;
 public class MainActivity extends AppCompatActivity {
 
     private EditText etName;
-    private Button btnStart, btnRank, btnLogout;
+    private Button btnStart, btnRank, btnHistory, btnLogout;
     private SharedPreferences sp;
 
     @Override
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         etName = findViewById(R.id.et_name);
         btnStart = findViewById(R.id.btn_start);
         btnRank = findViewById(R.id.btn_rank);
+        btnHistory = findViewById(R.id.btn_history);
         btnLogout = findViewById(R.id.btn_logout);
 
         sp = getSharedPreferences("user_info", MODE_PRIVATE);
@@ -55,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
         // 排行榜按钮逻辑
         btnRank.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, RankActivity.class));
+        });
+
+        // 历史记录按钮逻辑
+        btnHistory.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, HistoryActivity.class));
         });
 
         // 退出登录按钮逻辑

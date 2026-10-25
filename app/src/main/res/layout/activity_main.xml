@@ -1,54 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:gravity="center"
-              android:padding="24dp">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:background="@drawable/bg_main_gradient">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="俄罗斯方块"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="40dp"
-            android:textColor="#009688"/>
-
-    <EditText
-            android:id="@+id/et_name"
+    <!-- 中间的白色半透明卡片 -->
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="请输入玩家昵称"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:inputType="text"
-            android:layout_marginBottom="24dp"/>
+            android:layout_margin="24dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-            android:id="@+id/btn_start"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="开始游戏"
-            android:textSize="18sp"
-            android:layout_marginBottom="12dp"/>
+        <!-- 游戏大标题 -->
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="sans-serif-black"
+                android:text="俄罗斯方块"
+                android:textColor="@color/morandi_primary"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-    <Button
-            android:id="@+id/btn_rank"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="查看排行榜"
-            android:textSize="18sp"
-            android:layout_marginBottom="12dp"/>
+        <!-- 昵称输入框 -->
+        <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/morandi_primary_light"
+                android:gravity="center"
+                android:hint="请输入玩家昵称"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:textColor="@color/morandi_text_dark" />
 
-    <!-- 新增的退出登录按钮，默认隐藏 -->
-    <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="退出登录"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:backgroundTint="#FF5252"
-            android:textColor="#FFFFFF"/>
-</LinearLayout>
+        <!-- 开始游戏 (莫兰迪灰绿) -->
+        <Button
+                android:id="@+id/btn_start"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/morandi_primary"
+                android:text="开始游戏"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="26dp"
+                app:strokeWidth="0dp" />
+
+        <!-- 查看排行榜 (莫兰迪灰蓝) -->
+        <Button
+                android:id="@+id/btn_rank"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/morandi_secondary"
+                android:text="查看排行榜"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="26dp"
+                app:strokeWidth="0dp" />
+
+        <!-- 历史记录 (莫兰迪灰米) -->
+        <Button
+                android:id="@+id/btn_history"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/morandi_neutral"
+                android:text="历史记录"
+                android:textSize="18sp"
+                android:textColor="@color/morandi_text_dark"
+                app:cornerRadius="26dp"
+                app:strokeWidth="0dp" />
+
+        <!-- 退出登录 (莫兰迪灰玫红，默认隐藏) -->
+        <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/morandi_warning"
+                android:text="退出登录"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:visibility="gone"
+                app:cornerRadius="24dp"
+                app:strokeWidth="0dp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

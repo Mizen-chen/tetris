@@ -37,18 +37,18 @@ public class GameView extends View {
         float offsetX = (w - cell * GameBoard.COLS) / 2f;
         float offsetY = (h - cell * GameBoard.ROWS) / 2f;
 
-        // 背景改成浅灰偏白，不再是黑黑的
-        paint.setColor(Color.parseColor("#F5F5F5"));
+        // 莫兰迪暖白背景
+        paint.setColor(Color.parseColor("#F5F2ED"));
         canvas.drawRect(0, 0, w, h, paint);
 
-        // 画外边框
-        paint.setColor(Color.parseColor("#BDBDBD"));
+        // 画外边框（莫兰迪灰米）
+        paint.setColor(Color.parseColor("#BFB5A8"));
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(4);
         canvas.drawRect(offsetX, offsetY, offsetX + cell * GameBoard.COLS, offsetY + cell * GameBoard.ROWS, paint);
 
-        // 网格线改成很细的白色
-        paint.setColor(Color.parseColor("#E0E0E0"));
+        // 网格线（莫兰迪浅灰米）
+        paint.setColor(Color.parseColor("#D9D2C8"));
         paint.setStrokeWidth(1);
         for (int r = 1; r < GameBoard.ROWS; r++) {
             float y = offsetY + r * cell;
